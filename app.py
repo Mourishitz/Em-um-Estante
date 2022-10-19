@@ -42,8 +42,8 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/autenticate', methods=['POST',])
-def autenticate():
+@app.route('/authenticate', methods=['POST',])
+def authenticate():
     if 'alohomora' == request.form['password']:
         session['current_user'] = request.form['username']
         flash(f'{session["current_user"]} logado com sucesso!')
