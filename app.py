@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, flash
 
 
 class Book:
@@ -14,6 +14,7 @@ bk3 = Book('Diario de Anne Frank', 'Biografia', 'Anne Frank')
 book_list = [bk1, bk2, bk3]
 
 app = Flask(__name__)
+app.secret_key = 'secret'
 
 
 @app.route('/')
@@ -40,11 +41,23 @@ def create():
 def login():
     return render_template('login.html')
 
+
 @app.route('/autenticate', methods=['POST',])
 def autenticate():
     if 'alohomora' == request.form['password']:
+        session['current_user'] = request.form['username']
+        flash(f'{session["current_user"]} logado com sucesso!')
         return redirect('/')
     else:
+        flash('Não encontramos o seu usuário')
         return redirect('/login')
+
+
+@app.route('/logout')
+def logout():
+    session['current_user'] = None
+    flash('Logout efetuado com sucesso!')
+    return redirect('/')
+
 
 app.run(debug=True)
